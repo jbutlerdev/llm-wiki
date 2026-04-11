@@ -7,14 +7,14 @@
     "build": "tsc",
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
-    "test": "vitest",
+    "test": "vitest --run",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
   "dependencies": {
     "@hono/node-server": "^1.12.0",
-    "@llm-wiki/core": "workspace:*",
+    "@llm-wiki/core": "0.1.0",
     "hono": "^4.0.0",
     "ws": "^8.18.0",
     "zod": "^3.23.0"

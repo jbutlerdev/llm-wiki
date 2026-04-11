@@ -14,13 +14,13 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "vitest",
+    "test": "vitest --run",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@tobilu/qmd": "^0.2.1",
+    "@tobilu/qmd": "^2.1.0",
     "chokidar": "^4.0.0",
     "execa": "^9.0.0",
     "gray-matter": "^4.0.3",
