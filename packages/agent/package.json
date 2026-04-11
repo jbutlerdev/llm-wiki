@@ -1,0 +1,64 @@
+{
+  "name": "@llm-wiki/agent",
+  "version": "0.1.0",
+  "description": "Embedded Pi agent for LLM Wiki with autonomous maintenance loop",
+  "keywords": ["wiki", "agent", "llm", "autonomous"],
+  "author": "jbutlerdev <jbutlerdev@example.com>",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./session": {
+      "types": "./dist/session/index.d.ts",
+      "import": "./dist/session/index.js"
+    },
+    "./tools": {
+      "types": "./dist/tools/index.d.ts",
+      "import": "./dist/tools/index.js"
+    },
+    "./skills": {
+      "types": "./dist/skills/index.d.ts",
+      "import": "./dist/skills/index.js"
+    },
+    "./modes": {
+      "types": "./dist/modes/index.d.ts",
+      "import": "./dist/modes/index.js"
+    },
+    "./loop": {
+      "types": "./dist/loop/index.d.ts",
+      "import": "./dist/loop/index.js"
+    },
+    "./events": {
+      "types": "./dist/events/index.d.ts",
+      "import": "./dist/events/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest --run",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@llm-wiki/core": "0.1.0",
+    "@mariozechner/pi-coding-agent": "^0.66.1",
+    "@sinclair/typebox": "^0.32.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "vitest": "^2.0.0"
+  },
+  "peerDependencies": {
+    "@llm-wiki/core": "^0.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

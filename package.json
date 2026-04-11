@@ -3,6 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "description": "LLM-maintained personal wiki with built-in QMD search",
+  "keywords": [
+    "wiki",
+    "llm",
+    "knowledge-base",
+    "rag",
+    "search",
+    "agent",
+    "qmd"
+  ],
+  "author": "jbutlerdev <jbutlerdev@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jbutlerdev/llm-wiki.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jbutlerdev/llm-wiki/issues"
+  },
+  "homepage": "https://github.com/jbutlerdev/llm-wiki#readme",
   "workspaces": [
     "packages/*"
   ],
@@ -10,13 +29,25 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "test": "turbo test",
+    "test:integration": "cd integration && vitest --run",
+    "test:integration:watch": "cd integration && vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "clean": "turbo clean"
+    "clean": "turbo clean",
+    "start:test": "cd packages/server && npm run build && node dist/index.js --port 3000 --wiki ./data/test-wiki"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@playwright/test": "^1.59.1",
     "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.58.1",
+    "@typescript-eslint/parser": "^8.58.1",
     "eslint": "^9.0.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.4.0",
     "prettier": "^3.0.0",
     "turbo": "^2.0.0",
     "typescript": "^5.5.0",
@@ -26,5 +57,8 @@
     "node": ">=22",
     "npm": ">=10"
   },
-  "packageManager": "npm@10.9.0"
+  "packageManager": "npm@10.9.0",
+  "dependencies": {
+    "chalk": "^5.6.2"
+  }
 }

@@ -1,7 +1,10 @@
 {
   "name": "@llm-wiki/core",
   "version": "0.1.0",
-  "description": "Core wiki operations and types",
+  "description": "Core wiki operations, types, and QMD search integration",
+  "keywords": ["wiki", "llm", "knowledge-base", "qmd"],
+  "author": "jbutlerdev <jbutlerdev@example.com>",
+  "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -9,6 +12,74 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./wiki": {
+      "types": "./dist/wiki/index.d.ts",
+      "import": "./dist/wiki/index.js"
+    },
+    "./wiki/page": {
+      "types": "./dist/wiki/page.d.ts",
+      "import": "./dist/wiki/page.js"
+    },
+    "./wiki/list": {
+      "types": "./dist/wiki/list.d.ts",
+      "import": "./dist/wiki/list.js"
+    },
+    "./wiki/init": {
+      "types": "./dist/wiki/init.d.ts",
+      "import": "./dist/wiki/init.js"
+    },
+    "./wiki/path": {
+      "types": "./dist/wiki/path.d.ts",
+      "import": "./dist/wiki/path.js"
+    },
+    "./wiki/backlinks": {
+      "types": "./dist/wiki/list.d.ts",
+      "import": "./dist/wiki/list.js"
+    },
+    "./wiki/source": {
+      "types": "./dist/wiki/source.d.ts",
+      "import": "./dist/wiki/source.js"
+    },
+    "./wiki/index": {
+      "types": "./dist/wiki/index.d.ts",
+      "import": "./dist/wiki/index.js"
+    },
+    "./source": {
+      "types": "./dist/source/index.d.ts",
+      "import": "./dist/source/index.js"
+    },
+    "./source/ingest": {
+      "types": "./dist/source/ingest.d.ts",
+      "import": "./dist/source/ingest.js"
+    },
+    "./source/loader": {
+      "types": "./dist/source/loader.d.ts",
+      "import": "./dist/source/loader.js"
+    },
+    "./qmd": {
+      "types": "./dist/qmd/index.d.ts",
+      "import": "./dist/qmd/index.js"
+    },
+    "./qmd/search": {
+      "types": "./dist/qmd/search.d.ts",
+      "import": "./dist/qmd/search.js"
+    },
+    "./qmd/indexer": {
+      "types": "./dist/qmd/indexer.d.ts",
+      "import": "./dist/qmd/indexer.js"
+    },
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "import": "./dist/schema/index.js"
+    },
+    "./config": {
+      "types": "./dist/config/index.d.ts",
+      "import": "./dist/config/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.js"
     }
   },
   "scripts": {

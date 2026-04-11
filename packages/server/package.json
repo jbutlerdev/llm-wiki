@@ -1,8 +1,19 @@
 {
   "name": "@llm-wiki/server",
   "version": "0.1.0",
-  "description": "Hono API server for LLM Wiki",
+  "description": "Hono API server for LLM Wiki with WebSocket support",
+  "keywords": ["wiki", "api", "server", "websocket"],
+  "author": "jbutlerdev <jbutlerdev@example.com>",
+  "license": "MIT",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch src/index.ts",
@@ -16,16 +27,18 @@
     "@hono/node-server": "^1.12.0",
     "@llm-wiki/core": "0.1.0",
     "hono": "^4.0.0",
+    "mime-types": "^2.1.35",
     "ws": "^8.18.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
+    "@types/mime-types": "^2.1.4",
     "@types/node": "^22.0.0",
     "@types/ws": "^8.5.0",
     "tsx": "^4.0.0",
     "vitest": "^2.0.0"
   },
   "peerDependencies": {
-    "@llm-wiki/core": "workspace:*"
+    "@llm-wiki/core": "^0.1.0"
   }
 }

@@ -12,11 +12,12 @@ This plan follows Test-Driven Development (TDD) patterns. Each phase begins with
 Set up the monorepo structure, TypeScript configuration, testing infrastructure, and establish coding conventions.
 
 ### Deliverables
-- Monorepo with Turborepo (packages/core, packages/cli, packages/server, packages/web)
+- Monorepo with Turborepo (packages/core, packages/agent, packages/cli, packages/server, packages/web)
 - TypeScript strict mode configuration
 - Vitest testing framework for all packages
 - ESLint + Prettier configuration
 - QMD package integrated into core
+- pi-coding-agent SDK setup in agent package
 - Git hooks for pre-commit validation
 
 ### Estimated Duration
@@ -45,6 +46,11 @@ None
 - [x] **Create packages/server**
   - Set up Hono server package
   - Configure public directory for web assets
+  - Add to workspace
+
+- [x] **Create packages/agent**
+  - Set up agent package
+  - Configure pi-coding-agent SDK
   - Add to workspace
 
 - [x] **Create packages/web**
@@ -129,18 +135,22 @@ Phase 0
   - Default values for optional fields
   - Path validation
 
-- [ ] **Write failing test: API response types for server**
+- [x] **Write failing test: API response types for server**
   - Test PageListResponse
   - Test SearchResponse
   - Test LintReportResponse
 
-- [ ] **Implement: API types in shared location**
+- [x] **Implement: API types in shared location**
   - Make types available to both server and web packages
   - Export via packages/core
 
-- [ ] **Refactor: Extract shared types to index.ts barrel export**
+- [x] **Refactor: Extract shared types to index.ts barrel export**
   - Re-export all types from packages/core
   - Ensure barrel exports work across packages
+
+- [x] **Add mock fixtures for testing**
+  - Create fixture helper functions
+  - Add comprehensive fixture tests
 
 ---
 
@@ -163,62 +173,62 @@ Phase 1
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: Initialize wiki directory structure**
+- [x] **Write failing test: Initialize wiki directory structure**
   - Test raw/, wiki/ directories created
   - Test initial index.md created
   - Test CLAUDE.md schema template created
 
-- [ ] **Implement: init function in core**
+- [x] **Implement: init function in core**
   - Create directory structure
   - Generate initial files from templates
   - Return success with created paths
 
-- [ ] **Write failing test: Read existing wiki page**
+- [x] **Write failing test: Read existing wiki page**
   - Test loading page by slug
   - Test frontmatter parsing
   - Test content extraction
 
-- [ ] **Implement: loadPage function**
+- [x] **Implement: loadPage function**
   - Parse markdown file
   - Extract YAML frontmatter with gray-matter
   - Return WikiPage object
 
-- [ ] **Write failing test: Create new wiki page**
+- [x] **Write failing test: Create new wiki page**
   - Test page creation with all fields
   - Test frontmatter serialization
   - Test content formatting
 
-- [ ] **Implement: createPage function**
+- [x] **Implement: createPage function**
   - Generate markdown with frontmatter
   - Write to correct directory based on type
   - Return created page
 
-- [ ] **Write failing test: Update existing wiki page**
+- [x] **Write failing test: Update existing wiki page**
   - Test partial update (only changed fields)
   - Test full replacement
   - Test timestamp update
 
-- [ ] **Implement: updatePage function**
+- [x] **Implement: updatePage function**
   - Preserve existing frontmatter keys
   - Update modified fields
   - Touch lastModified timestamp
 
-- [ ] **Write failing test: Path traversal protection**
+- [x] **Write failing test: Path traversal protection**
   - Test that paths outside wiki/ are rejected
   - Test that hidden files (..) are blocked
   - Test absolute path rejection
 
-- [ ] **Implement: validateWikiPath utility**
+- [x] **Implement: validateWikiPath utility**
   - Resolve relative paths
   - Ensure within wiki directory
   - Throw on traversal attempts
 
-- [ ] **Write failing test: List all wiki pages**
+- [x] **Write failing test: List all wiki pages**
   - Test returning array of page metadata
   - Test filtering by page type
   - Test including orphan detection
 
-- [ ] **Implement: listPages function**
+- [x] **Implement: listPages function**
   - Recursively find all .md files
   - Parse frontmatter for metadata
   - Return sorted by lastModified
@@ -244,43 +254,43 @@ Phase 2
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: Load CLAUDE.md schema**
+- [x] **Write failing test: Load CLAUDE.md schema**
   - Test file existence check
   - Test section extraction
   - Test workflow parsing
 
-- [ ] **Implement: SchemaLoader class**
+- [x] **Implement: SchemaLoader class**
   - Load and cache schema
   - Extract workflow sections
   - Provide helper methods for schema access
 
-- [ ] **Write failing test: Generate initial CLAUDE.md**
+- [x] **Write failing test: Generate initial CLAUDE.md**
   - Test default schema template
   - Test customizable wiki name/description
   - Test workflow definitions
 
-- [ ] **Implement: generateSchemaTemplate function**
+- [x] **Implement: generateSchemaTemplate function**
   - Create CLAUDE.md with standard sections
   - Include ingest workflow
   - Include query workflow
   - Include lint workflow
 
-- [ ] **Write failing test: Schema convention validation**
+- [x] **Write failing test: Schema convention validation**
   - Test page naming conventions
   - Test frontmatter required fields
   - Test cross-reference format
 
-- [ ] **Implement: SchemaValidator class**
+- [x] **Implement: SchemaValidator class**
   - Validate page against conventions
   - Report convention violations
   - Suggest corrections
 
-- [ ] **Write failing test: Extract workflow steps from schema**
+- [x] **Write failing test: Extract workflow steps from schema**
   - Test ingest workflow parsing
   - Test query workflow parsing
   - Test lint workflow parsing
 
-- [ ] **Implement: WorkflowParser**
+- [x] **Implement: WorkflowParser**
   - Parse numbered workflow steps
   - Extract expected actions
   - Return structured workflow definition
@@ -306,82 +316,82 @@ Phase 3
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: Load source document**
+- [x] **Write failing test: Load source document**
   - Test markdown file loading
   - Test URL fetching and conversion
   - Test raw text input
 
-- [ ] **Implement: SourceLoader class**
+- [x] **Implement: SourceLoader class**
   - Handle markdown files
   - Fetch and convert URLs (turndown)
   - Accept raw text strings
 
-- [ ] **Write failing test: Generate source summary**
+- [x] **Write failing test: Generate source summary**
   - Test content analysis
   - Test key takeaway extraction
   - Test title generation
 
-- [ ] **Implement: SourceSummarizer**
+- [x] **Implement: SourceSummarizer**
   - Analyze document content
   - Extract key entities
   - Generate structured summary
 
-- [ ] **Write failing test: Create source page on ingest**
+- [x] **Write failing test: Create source page on ingest**
   - Test creating wiki/source/*.md
   - Test frontmatter with source metadata
   - Test linking to original source
 
-- [ ] **Implement: createSourcePage function**
+- [x] **Implement: createSourcePage function**
   - Generate source page from document
   - Add appropriate frontmatter
   - Store in wiki/source/ directory
 
-- [ ] **Write failing test: Update entity pages on ingest**
+- [x] **Write failing test: Update entity pages on ingest**
   - Test finding related entity pages
   - Test updating relevant cross-references
   - Test adding new entity pages
 
-- [ ] **Implement: updateRelatedEntities function**
+- [x] **Implement: updateRelatedEntities function**
   - Analyze source for entity mentions
   - Find existing entity pages
   - Update cross-references
 
-- [ ] **Write failing test: Update summary pages on ingest**
+- [x] **Write failing test: Update summary pages on ingest**
   - Test synthesizing with existing summary
   - Test identifying contradictions
   - Test maintaining coherent overview
 
-- [ ] **Implement: updateSummaryPages function**
+- [x] **Implement: updateSummaryPages function**
   - Merge new information
   - Flag contradictions
   - Regenerate summary
 
-- [ ] **Write failing test: Update index.md on ingest**
+- [x] **Write failing test: Update index.md on ingest**
   - Test adding new page to index
   - Test updating page summaries
   - Test maintaining categorization
 
-- [ ] **Implement: updateIndex function**
+- [x] **Implement: updateIndex function**
   - Parse current index
   - Add/update entry for new page
   - Maintain alphabetical/sorted order
 
-- [ ] **Write failing test: Log ingest operation**
+- [x] **Write failing test: Log ingest operation**
   - Test appending to log.md
   - Test consistent entry format
   - Test timestamp generation
 
-- [ ] **Implement: logIngest function**
+- [x] **Implement: logIngest function**
   - Generate log entry
   - Append to log.md
   - Format as ## [YYYY-MM-DD] ingest | Title
 
-- [ ] **Write failing test: Ingest command integration**
+- [x] **Write failing test: Ingest command integration**
   - Test full ingest flow with all steps
   - Test error recovery
   - Test idempotency (re-ingest same source)
 
-- [ ] **Implement: ingest function (core)**
+- [x] **Implement: ingest function (core)**
   - Orchestrate all ingest steps
   - Handle errors gracefully
   - Report changes made
@@ -406,51 +416,51 @@ Phase 4
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: Initialize QMD store for wiki**
+- [x] **Write failing test: Initialize QMD store for wiki**
   - Test store creation
   - Test collection configuration
   - Test wiki/ directory as collection
 
-- [ ] **Implement: QMDStore wrapper class**
+- [x] **Implement: QMDStore wrapper class**
   - Create store with wiki collection
   - Configure glob patterns for wiki pages
   - Handle store lifecycle (open/close)
 
-- [ ] **Write failing test: Index wiki pages to QMD**
+- [x] **Write failing test: Index wiki pages to QMD**
   - Test indexing all wiki pages
   - Test incremental updates
   - Test tracking docIds
 
-- [ ] **Implement: indexWiki function**
+- [x] **Implement: indexWiki function**
   - Scan wiki/ directory
   - Index all markdown files
   - Store docId mapping
 
-- [ ] **Write failing test: Hybrid search with query expansion**
+- [x] **Write failing test: Hybrid search with query expansion**
   - Test BM25 + vector combination
   - Test LLM re-ranking
   - Test result relevance scoring
 
-- [ ] **Implement: search function**
+- [x] **Implement: search function**
   - Use qmd query pipeline
   - Return formatted results
 
-- [ ] **Write failing test: Context system for collections**
+- [x] **Write failing test: Context system for collections**
   - Test adding context to wiki collection
   - Test path-level context
   - Test improving search relevance
 
-- [ ] **Implement: context management**
+- [x] **Implement: context management**
   - Add context for wiki/root
   - Add context for wiki/source, wiki/entity, etc.
   - Expose via qmd context API
 
-- [ ] **Write failing test: Auto-index on page update**
+- [x] **Write failing test: Auto-index on page update**
   - Test triggering re-index on createPage
   - Test triggering re-index on updatePage
   - Test batching for bulk operations
 
-- [ ] **Implement: watchWikiChanges**
+- [x] **Implement: watchWikiChanges**
   - Integrate with createPage/updatePage
   - Debounce re-indexing
   - Track modified pages
@@ -475,61 +485,61 @@ Phase 5
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: Init command**
+- [x] **Write failing test: Init command**
   - Test creating new wiki
   - Test with existing wiki (error)
   - Test custom directory
 
-- [ ] **Implement: init command**
+- [x] **Implement: init command**
   - Import from core
   - Add user prompts
   - Generate initial files
 
-- [ ] **Write failing test: Ingest command**
+- [x] **Write failing test: Ingest command**
   - Test ingest single file
   - Test ingest URL
   - Test ingest directory
 
-- [ ] **Implement: ingest command**
+- [x] **Implement: ingest command**
   - Parse arguments
   - Call core ingest
   - Format output
 
-- [ ] **Write failing test: Search command**
+- [x] **Write failing test: Search command**
   - Test basic search
   - Test with filters
   - Test JSON output
 
-- [ ] **Implement: search command**
+- [x] **Implement: search command**
   - Parse arguments
   - Call core search
   - Format results
 
-- [ ] **Write failing test: Lint command**
+- [x] **Write failing test: Lint command**
   - Test running lint
   - Test with --fix option
   - Test JSON output
 
-- [ ] **Implement: lint command**
+- [x] **Implement: lint command**
   - Parse arguments
   - Call lint functions
   - Format report
 
-- [ ] **Write failing test: Status command**
+- [x] **Write failing test: Status command**
   - Test wiki status output
   - Test QMD stats
 
-- [ ] **Implement: status command**
+- [x] **Implement: status command**
   - Get wiki stats
   - Get QMD status
   - Format output
 
-- [ ] **Write failing test: Help text and errors**
+- [x] **Write failing test: Help text and errors**
   - Test --help output
   - Test unknown command error
   - Test validation errors
 
-- [ ] **Implement: CLI error handling**
+- [x] **Implement: CLI error handling**
   - Add help command
   - Add version command
   - Handle errors gracefully
@@ -555,81 +565,270 @@ Phase 6
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: Server starts successfully**
+- [x] **Write failing test: Server starts successfully**
   - Test server initialization
   - Test port binding
   - Test health endpoint
 
-- [ ] **Implement: Server entry point**
+- [x] **Implement: Server entry point**
   - Set up Hono app
   - Add health route
   - Configure CORS
 
-- [ ] **Write failing test: Pages API**
+- [x] **Write failing test: Pages API**
   - Test GET /api/pages
   - Test GET /api/pages/:id
   - Test POST /api/pages
 
-- [ ] **Implement: Pages routes**
+- [x] **Implement: Pages routes**
   - GET all pages with filtering
   - GET single page by ID
   - POST create page
   - PUT update page
   - DELETE page
 
-- [ ] **Write failing test: Sources API**
+- [x] **Write failing test: Sources API**
   - Test GET /api/sources
   - Test POST /api/sources/ingest
 
-- [ ] **Implement: Sources routes**
+- [x] **Implement: Sources routes**
   - GET all sources
   - POST ingest new source
   - GET source by ID
 
-- [ ] **Write failing test: Search API**
+- [x] **Write failing test: Search API**
   - Test GET /api/search
   - Test query parameters
   - Test response format
 
-- [ ] **Implement: Search route**
+- [x] **Implement: Search route**
   - GET search with qmd
   - Parse query and filters
   - Return formatted results
 
-- [ ] **Write failing test: Lint API**
+- [x] **Write failing test: Lint API**
   - Test GET /api/lint
   - Test lint report format
 
-- [ ] **Implement: Lint routes**
+- [x] **Implement: Lint routes**
   - GET run lint and return report
   - GET lint history
 
-- [ ] **Write failing test: Config API**
+- [x] **Write failing test: Config API**
   - Test GET /api/config
   - Test PUT /api/config
 
-- [ ] **Implement: Config routes**
+- [x] **Implement: Config routes**
   - GET wiki configuration
   - PUT update configuration
 
-- [ ] **Write failing test: WebSocket updates**
+- [x] **Write failing test: WebSocket updates** ✓
   - Test connection established
   - Test message format
   - Test file change broadcasts
 
-- [ ] **Implement: WebSocket handler**
+- [x] **Implement: WebSocket handler** ✓
   - Set up ws protocol
   - Broadcast wiki changes
   - Handle client connections
 
-- [ ] **Write failing test: Static file serving**
+- [x] **Write failing test: Static file serving** ✓
   - Test serving index.html
   - Test serving JS/CSS bundles
   - Test 404 handling
 
-- [ ] **Implement: Static file middleware**
+- [x] **Implement: Static file middleware** ✓
   - Serve built web assets
   - SPA fallback for /app/* routes
+
+---
+
+## Phase 7a: Agent Core (packages/agent)
+
+### Objective
+Set up the embedded Pi agent using `pi-coding-agent` SDK with custom wiki tools.
+
+### Deliverables
+- Pi agent session management
+- Wiki tools (wiki_search, wiki_ingest, wiki_query, etc.)
+- Agent skills (ingest, query, lint)
+- AGENTS.md template generation
+
+### Estimated Duration
+1-2 weeks
+
+### Dependencies
+Phase 5 (QMD), Phase 7 (Server API)
+
+### Tasks (TDD Cycle)
+
+- [x] **Write failing test: Create Pi agent session**
+  - Test session creation with auth storage
+  - Test model registry setup
+  - Test session persistence
+
+- [x] **Implement: Agent session manager**
+  - Set up AuthStorage and ModelRegistry
+  - Create session with createAgentSession()
+  - Configure session persistence
+
+- [x] **Write failing test: Wiki search tool**
+  - Test tool definition format
+  - Test query parameter handling
+  - Test result formatting
+
+- [x] **Implement: wiki_search tool**
+  - Define tool with defineTool()
+  - Integrate QMD hybrid search
+  - Return formatted results with snippets
+
+- [x] **Write failing test: Wiki ingest tool**
+  - Test source parameter handling
+  - Test option parameters
+  - Test result with created pages
+
+- [x] **Implement: wiki_ingest tool**
+  - Define tool for ingestion
+  - Integrate core ingest function
+  - Return summary of changes
+
+- [x] **Write failing test: Wiki query tool**
+  - Test question parameter
+  - Test fileAnswer option
+  - Test answer synthesis
+
+- [x] **Implement: wiki_query tool**
+  - Define tool for querying
+  - Integrate query pipeline
+  - Return synthesized answer with citations
+
+- [x] **Write failing test: Wiki status tool**
+  - Test health check execution
+  - Test stats formatting
+
+- [x] **Implement: wiki_status tool**
+  - Define tool for status
+  - Return wiki health and stats
+
+- [x] **Write failing test: Wiki get/list tools**
+  - Test wiki_get for single page
+  - Test wiki_list with filters
+
+- [x] **Implement: wiki_get and wiki_list tools**
+  - Define tools for page retrieval
+  - Support ID/path lookup
+  - Return formatted pages
+
+- [x] **Write failing test: Agent skills**
+  - Test ingest skill loading
+  - Test query skill loading
+  - Test lint skill loading
+
+- [x] **Implement: Agent skills**
+  - Create SKILL.md for ingest workflow
+  - Create SKILL.md for query workflow
+  - Create SKILL.md for lint workflow
+
+- [x] **Write failing test: AGENTS.md template**
+  - Test template generation
+  - Test schema conventions
+  - Test workflow instructions
+
+- [x] **Implement: AGENTS.md template**
+  - Generate AGENTS.md with conventions
+  - Include workflow definitions
+  - Add error handling guidelines
+
+---
+
+## Phase 7b: Agent Loop & Modes (packages/agent)
+
+### Objective
+Implement the autonomous agent loop and mode system.
+
+### Deliverables
+- Autonomous maintenance loop
+- Interactive mode (CLI commands)
+- Semi-autonomous mode (with approvals)
+- Agent status and event streaming
+
+### Estimated Duration
+1-2 weeks
+
+### Dependencies
+Phase 7a
+
+### Tasks (TDD Cycle)
+
+- [x] **Write failing test: Agent mode enum and transitions**
+  - Test mode values (interactive, semi, autonomous)
+  - Test mode switching
+  - Test mode validation
+
+- [x] **Implement: Agent modes**
+  - Define AgentMode type
+  - Implement mode configuration
+  - Persist mode setting
+
+- [x] **Write failing test: Autonomous loop**
+  - Test check sources cycle
+  - Test lint cycle
+  - Test sleep/wake behavior
+
+- [x] **Implement: AgentLoop class**
+  - Implement maintenance cycle
+  - Add configurable interval
+  - Handle graceful shutdown
+
+- [x] **Write failing test: Interactive mode**
+  - Test command queue
+  - Test prompt processing
+  - Test response streaming
+
+- [x] **Implement: Interactive mode**
+  - Process explicit commands
+  - Stream responses to caller
+  - Handle session management
+
+- [x] **Write failing test: Semi-autonomous mode**
+  - Test approval queue
+  - Test major change detection
+  - Test approval/rejection flow
+
+- [x] **Implement: Semi-autonomous mode**
+  - Define "major change" criteria
+  - Create approval workflow
+  - Implement wait for approval
+
+- [x] **Write failing test: Agent events**
+  - Test event types
+  - Test event emission
+  - Test SSE streaming
+
+- [x] **Implement: Agent event system**
+  - Define event types
+  - Emit events on state change
+  - Stream via Server-Sent Events
+
+- [x] **Write failing test: Agent CLI commands**
+  - Test agent start/stop
+  - Test agent mode command
+  - Test agent status
+
+- [x] **Implement: Agent CLI integration**
+  - Add agent commands to CLI
+  - Integrate with server API
+  - Add real-time output
+
+- [x] **Write failing test: Agent WebSocket integration**
+  - Test agent events via WebSocket
+  - Test wiki changes from agent
+  - Test real-time UI updates
+
+- [x] **Implement: Agent WebSocket**
+  - Broadcast agent events
+  - Include agent status in broadcasts
+  - Handle client connections
 
 ---
 
@@ -653,72 +852,72 @@ Phase 7
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: App routing**
+- [x] **Write failing test: App routing**
   - Test React Router setup
   - Test route guards
   - Test 404 handling
 
-- [ ] **Implement: App routing**
+- [x] **Implement: App routing**
   - Set up React Router
   - Define route structure
   - Add layout wrapper
 
-- [ ] **Write failing test: Sidebar component**
+- [x] **Write failing test: Sidebar component**
   - Test navigation tree
   - Test collapse/expand
   - Test active state
 
-- [ ] **Implement: Sidebar component**
+- [x] **Implement: Sidebar component**
   - Fetch page tree from API
   - Render navigation
   - Add collapse state
 
-- [ ] **Write failing test: Dashboard page**
+- [x] **Write failing test: Dashboard page**
   - Test stats cards
   - Test recent activity
   - Test lint summary
 
-- [ ] **Implement: Dashboard page**
+- [x] **Implement: Dashboard page**
   - Fetch wiki status
   - Display stats
   - Show recent log entries
 
-- [ ] **Write failing test: Browse page**
+- [x] **Write failing test: Browse page**
   - Test page list
   - Test filtering
   - Test pagination
 
-- [ ] **Implement: Browse page**
+- [x] **Implement: Browse page**
   - Fetch pages from API
   - Add type/tag filters
   - Add sorting options
 
-- [ ] **Write failing test: Page view**
+- [x] **Write failing test: Page view**
   - Test markdown rendering
   - Test table of contents
   - Test backlinks display
 
-- [ ] **Implement: Page view**
+- [x] **Implement: Page view**
   - Fetch page by ID
   - Render markdown with react-markdown
   - Extract TOC from headings
   - Show backlinks
 
-- [ ] **Write failing test: Search overlay**
+- [x] **Write failing test: Search overlay**
   - Test Cmd+K trigger
   - Test search input
   - Test results display
 
-- [ ] **Implement: Search overlay**
+- [x] **Implement: Search overlay**
   - Add keyboard shortcut
   - Create modal component
   - Fetch and display results
 
-- [ ] **Write failing test: Theme toggle**
+- [x] **Write failing test: Theme toggle**
   - Test light/dark switching
   - Test persistence
 
-- [ ] **Implement: Theme toggle**
+- [x] **Implement: Theme toggle**
   - Add theme context
   - Persist to localStorage
   - Apply Tailwind dark mode
@@ -728,12 +927,13 @@ Phase 7
 ## Phase 9: Web Frontend - Advanced Features
 
 ### Objective
-Build advanced web UI features: graph view, sources management, lint dashboard.
+Build advanced web UI features: graph view, sources management, lint dashboard, agent dashboard.
 
 ### Deliverables
 - Interactive graph visualization (D3.js)
 - Source management UI
 - Lint dashboard with fix actions
+- Agent dashboard with status, controls, and activity log
 - Settings/schema editor
 
 ### Estimated Duration
@@ -744,54 +944,76 @@ Phase 8
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: Graph page**
-  - Test D3 force-directed graph
-  - Test node clicking
-  - Test zoom/pan
+- [x] **Write failing test: Graph page** ✓
+  - Test D3 force-directed graph ✓
+  - Test node clicking ✓
+  - Test zoom/pan ✓
 
-- [ ] **Implement: Graph page**
-  - Fetch graph data from API
-  - Render D3 force simulation
-  - Add interactions
+- [x] **Implement: Graph page** ✓
+  - Fetch graph data from API ✓
+  - Render D3 force simulation ✓
+  - Add interactions ✓
 
-- [ ] **Write failing test: Sources page**
-  - Test source list
-  - Test upload component
-  - Test URL import
+- [x] **Write failing test: Sources page** ✓
+  - Test source list ✓
+  - Test upload component ✓
+  - Test URL import ✓
 
-- [ ] **Implement: Sources page**
-  - Fetch sources from API
-  - Add file upload
-  - Add URL import form
+- [x] **Implement: Sources page** ✓
+  - Fetch sources from API ✓
+  - Add file upload ✓
+  - Add URL import form ✓
 
-- [ ] **Write failing test: Lint dashboard**
-  - Test issue list
-  - Test filtering by type
-  - Test fix actions
+- [x] **Write failing test: Lint dashboard** ✓
+  - Test issue list ✓
+  - Test filtering by type ✓
+  - Test fix actions ✓
 
-- [ ] **Implement: Lint dashboard**
-  - Fetch lint report
-  - Display issues by severity
-  - Add fix buttons
+- [x] **Implement: Lint dashboard** ✓
+  - Fetch lint report ✓
+  - Display issues by severity ✓
+  - Add fix buttons ✓
 
-- [ ] **Write failing test: Settings page**
-  - Test config display
-  - Test schema editor
+- [x] **Write failing test: Settings page** ✓
+  - Test config display ✓
+  - Test schema editor ✓
 
-- [ ] **Implement: Settings page**
-  - Display current config
-  - Add schema editor
-  - Add save functionality
+- [x] **Implement: Settings page** ✓
+  - Display current config ✓
+  - Add schema editor ✓
+  - Add save functionality ✓
 
-- [ ] **Write failing test: Responsive design**
-  - Test mobile sidebar
-  - Test tablet layout
-  - Test touch interactions
+- [x] **Write failing test: Agent dashboard** ✓
+  - Test agent status display ✓
+  - Test mode controls ✓
+  - Test activity log ✓
 
-- [ ] **Implement: Responsive layouts**
-  - Add mobile breakpoints
-  - Implement hamburger menu
-  - Improve touch targets
+- [x] **Implement: Agent dashboard** ✓
+  - Fetch agent status from API ✓
+  - Display mode and current task ✓
+  - Add start/stop/mode controls ✓
+  - Show activity log ✓
+
+- [x] **Write failing test: Agent approval UI** ✓
+  - Test approval modal ✓
+  - Test pending changes display ✓
+  - Test approve/reject actions ✓
+
+- [x] **Implement: Agent approval UI** ✓
+  - Fetch pending approvals ✓
+  - Display change details ✓
+  - Add approve/reject buttons ✓
+  - Send approval decisions to API ✓
+
+- [x] **Write failing test: Responsive design** ✓
+  - Test mobile sidebar ✓
+  - Test tablet layout ✓
+  - Test touch interactions ✓
+
+- [x] **Implement: Responsive layouts** ✓
+  - Add mobile breakpoints ✓
+  - Implement hamburger menu ✓
+  - Improve touch targets ✓
 
 ---
 
@@ -814,52 +1036,52 @@ Phase 5 (QMD), Phase 6 (CLI), Phase 7 (Server)
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: Process question with search**
-  - Test query expansion
-  - Test hybrid search execution
-  - Test result ranking
+- [x] **Write failing test: Process question with search** ✓
+  - Test query expansion ✓
+  - Test hybrid search execution ✓
+  - Test result ranking ✓
 
-- [ ] **Implement: processQuestion function (core)**
-  - Expand question with related terms
-  - Execute hybrid search
-  - Return ranked results
+- [x] **Implement: processQuestion function (core)** ✓
+  - Expand question with related terms ✓
+  - Execute hybrid search ✓
+  - Return ranked results ✓
 
-- [ ] **Write failing test: Synthesize answer from results**
-  - Test reading relevant pages
-  - Test combining information
-  - Test citation generation
+- [x] **Write failing test: Synthesize answer from results** ✓
+  - Test reading relevant pages ✓
+  - Test combining information ✓
+  - Test citation generation ✓
 
-- [ ] **Implement: synthesizeAnswer function**
-  - Read top-ranked wiki pages
-  - Generate coherent answer
-  - Add inline citations
+- [x] **Implement: synthesizeAnswer function** ✓
+  - Read top-ranked wiki pages ✓
+  - Generate coherent answer ✓
+  - Add inline citations ✓
 
-- [ ] **Write failing test: CLI query command**
-  - Test query command with question
-  - Test output formatting
+- [x] **Write failing test: CLI query command** ✓
+  - Test query command with question ✓
+  - Test output formatting ✓
 
-- [ ] **Implement: query command (CLI)**
-  - Call processQuestion
-  - Format answer with citations
-  - Offer to file answer
+- [x] **Implement: query command (CLI)** ✓
+  - Call processQuestion ✓
+  - Format answer with citations ✓
+  - Offer to file answer ✓
 
-- [ ] **Write failing test: Query API endpoint**
-  - Test POST /api/query
-  - Test response format
+- [x] **Write failing test: Query API endpoint** ✓
+  - Test POST /api/query ✓
+  - Test response format ✓
 
-- [ ] **Implement: Query route (server)**
-  - Accept question in body
-  - Call core query functions
-  - Return formatted answer
+- [x] **Implement: Query route (server)** ✓
+  - Accept question in body ✓
+  - Call core query functions ✓
+  - Return formatted answer ✓
 
-- [ ] **Write failing test: File answer back to wiki**
-  - Test creating new wiki page from answer
-  - Test CLI prompting user for confirmation
+- [x] **Write failing test: File answer back to wiki** ✓
+  - Test creating new wiki page from answer ✓
+  - Test CLI prompting user for confirmation ✓
 
-- [ ] **Implement: fileAnswer function**
-  - Detect "good answer" candidates
-  - Create wiki page from answer
-  - Update index and log
+- [x] **Implement: fileAnswer function** ✓
+  - Detect "good answer" candidates ✓
+  - Create wiki page from answer ✓
+  - Update index and log ✓
 
 ---
 
@@ -882,52 +1104,52 @@ Phase 2 (file operations), Phase 10 (query)
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: Detect contradictions between pages**
+- [x] **Write failing test: Detect contradictions between pages**
   - Test extracting factual claims
   - Test comparing claims across pages
   - Test flagging conflicting information
 
-- [ ] **Implement: contradictionDetector**
+- [x] **Implement: contradictionDetector**
   - Parse factual claims from pages
   - Build claim index
   - Find conflicts
 
-- [ ] **Write failing test: Check for stale information**
+- [x] **Write failing test: Check for stale information**
   - Test comparing source dates
   - Test identifying superseded claims
   - Test marking stale content
 
-- [ ] **Implement: stalenessChecker**
+- [x] **Implement: stalenessChecker**
   - Track source timestamps
   - Compare with wiki page dates
   - Flag potentially stale content
 
-- [ ] **Write failing test: Find orphan pages**
+- [x] **Write failing test: Find orphan pages** (done in Phase 2)
   - Test building link graph
   - Test identifying pages with no inbound links
   - Test detecting dead ends
 
-- [ ] **Implement: orphanDetector**
+- [x] **Implement: orphanDetector** (done in Phase 2)
   - Parse [[wiki-links]] from pages
   - Build adjacency list
   - Find unlinked pages
 
-- [ ] **Write failing test: Coverage analysis**
+- [x] **Write failing test: Coverage analysis**
   - Test identifying under-covered concepts
   - Test suggesting missing cross-references
   - Test recommending new pages
 
-- [ ] **Implement: coverageAnalyzer**
+- [x] **Implement: coverageAnalyzer**
   - Analyze concept mentions
   - Compare with existing entity pages
   - Generate coverage report
 
-- [ ] **Write failing test: Lint command integration**
+- [x] **Write failing test: Lint command integration**
   - Test running all checks
   - Test report generation
   - Test --fix option
 
-- [ ] **Implement: lint command**
+- [x] **Implement: lint command**
   - Run all lint operations
   - Generate markdown report
   - Offer automated fixes
@@ -952,54 +1174,54 @@ Phase 10, Phase 11
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: MCP server starts**
-  - Test server initialization
-  - Test tool registration
-  - Test stdio communication
+- [x] **Write failing test: MCP server starts** ✓
+  - Test server initialization ✓
+  - Test tool registration ✓
+  - Test stdio communication ✓
 
-- [ ] **Implement: MCP server entry point**
-  - Set up MCP protocol
-  - Register wiki tools
-  - Handle stdio transport
+- [x] **Implement: MCP server entry point** ✓
+  - Set up MCP protocol ✓
+  - Register wiki tools ✓
+  - Handle stdio transport ✓
 
-- [ ] **Write failing test: wiki_search tool**
-  - Test search tool call
-  - Test parameters
-  - Test response format
+- [x] **Write failing test: wiki_search tool** ✓
+  - Test search tool call ✓
+  - Test parameters ✓
+  - Test response format ✓
 
-- [ ] **Implement: wiki_search tool**
-  - Expose search via MCP
-  - Parse search parameters
-  - Return formatted results
+- [x] **Implement: wiki_search tool** ✓
+  - Expose search via MCP ✓
+  - Parse search parameters ✓
+  - Return formatted results ✓
 
-- [ ] **Write failing test: wiki_get tool**
-  - Test get page by path
-  - Test get by docid
+- [x] **Write failing test: wiki_get tool** ✓
+  - Test get page by path ✓
+  - Test get by docid ✓
 
-- [ ] **Implement: wiki_get tool**
-  - Expose page retrieval
-  - Support path and docid lookup
+- [x] **Implement: wiki_get tool** ✓
+  - Expose page retrieval ✓
+  - Support path and docid lookup ✓
 
-- [ ] **Write failing test: wiki_ingest tool**
-  - Test ingest source
-  - Test file and URL sources
+- [x] **Write failing test: wiki_ingest tool** ✓
+  - Test ingest source ✓
+  - Test file and URL sources ✓
 
-- [ ] **Implement: wiki_ingest tool**
-  - Expose ingest via MCP
-  - Support file and URL sources
+- [x] **Implement: wiki_ingest tool** ✓
+  - Expose ingest via MCP ✓
+  - Support file and URL sources ✓
 
-- [ ] **Write failing test: wiki_status tool**
-  - Test status output
-  - Test stats formatting
+- [x] **Write failing test: wiki_status tool** ✓
+  - Test status output ✓
+  - Test stats formatting ✓
 
-- [ ] **Implement: wiki_status tool**
-  - Expose wiki status
-  - Return formatted stats
+- [x] **Implement: wiki_status tool** ✓
+  - Expose wiki status ✓
+  - Return formatted stats ✓
 
-- [ ] **Write documentation: MCP configuration**
-  - Document Claude Desktop config
-  - Document Claude Code config
-  - Document Pi/other agents
+- [x] **Write documentation: MCP configuration** ✓
+  - Document Claude Desktop config ✓
+  - Document Claude Code config ✓
+  - Document Pi/other agents ✓
 
 ---
 
@@ -1022,50 +1244,50 @@ Phase 12
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: File watching for hot-reload**
+- [x] **Write failing test: File watching for hot-reload**
   - Test chokidar watching wiki/
   - Test WebSocket broadcast on changes
 
-- [ ] **Implement: File watcher**
+- [x] **Implement: File watcher**
   - Watch wiki directory
   - Broadcast changes via WebSocket
   - Debounce events
 
-- [ ] **Write failing test: Git integration (CLI)**
+- [x] **Write failing test: Git integration (CLI)**
   - Test git commit on changes
   - Test git diff output
   - Test rollback capability
 
-- [ ] **Implement: Git integration**
+- [x] **Implement: Git integration**
   - Auto-commit on changes (optional)
   - Show pending changes
   - Support revert
 
-- [ ] **Write failing test: Performance benchmarks**
+- [x] **Write failing test: Performance benchmarks**
   - Test search latency under load
   - Test page load times
   - Test memory usage
 
-- [ ] **Implement: Performance optimizations**
+- [x] **Implement: Performance optimizations**
   - Batch QMD operations
   - Cache schema parsing
   - Optimize React rendering
 
-- [ ] **Write failing test: Error handling**
+- [x] **Write failing test: Error handling**
   - Test API error responses
   - Test CLI error formatting
   - Test web error boundaries
 
-- [ ] **Implement: Error handling**
+- [x] **Implement: Error handling**
   - Add API error middleware
   - Improve CLI errors
   - Add React error boundaries
 
-- [ ] **Write failing test: User documentation**
+- [x] **Write failing test: User documentation**
   - Test README examples work
   - Test command help output
 
-- [ ] **Implement: Documentation**
+- [x] **Implement: Documentation**
   - Complete README with examples
   - Add command help text
   - Add web UI guide
@@ -1091,47 +1313,47 @@ Phase 13
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: Full ingest flow integration**
+- [x] **Write failing test: Full ingest flow integration**
   - Test source → wiki page → search → query
   - Test cross-reference updates
   - Test index synchronization
 
-- [ ] **Implement: Integration tests**
+- [x] **Implement: Integration tests**
   - Test complete workflows
   - Test error recovery
   - Test concurrent operations
 
-- [ ] **Write failing test: API integration tests**
+- [x] **Write failing test: API integration tests**
   - Test all endpoints
   - Test authentication
   - Test error responses
 
-- [ ] **Implement: API integration tests**
+- [x] **Implement: API integration tests**
   - Supertest for HTTP
   - Test all routes
   - Test edge cases
 
-- [ ] **Write failing test: Web E2E tests (Playwright)**
+- [x] **Write failing test: Web E2E tests (Playwright)**
   - Test browse pages
   - Test search
   - Test page view
   - Test graph view
 
-- [ ] **Implement: Playwright E2E tests**
+- [x] **Implement: Playwright E2E tests**
   - Set up Playwright
   - Write critical path tests
   - Run in CI
 
-- [ ] **Write failing test: Performance regression tests**
+- [x] **Write failing test: Performance regression tests**
   - Test search latency <500ms
   - Test web page load <1s
 
-- [ ] **Implement: Performance tests**
+- [x] **Implement: Performance tests**
   - Set up benchmarks
   - Add to CI
   - Document known limits
 
-- [ ] **Fix: Bugs discovered during testing**
+- [x] **Fix: Bugs discovered during testing**
   - Triage issues by severity
   - Fix critical bugs first
   - Add regression tests
@@ -1157,33 +1379,33 @@ Phase 14
 
 ### Tasks
 
-- [ ] **Finalize package.json metadata**
+- [x] **Finalize package.json metadata**
   - Add keywords, author, license
   - Verify scripts
   - Add funding info
 
-- [ ] **Set up GitHub Actions CI**
+- [x] **Set up GitHub Actions CI**
   - Test on Node 22
   - Test on Bun
   - Run lint and type check
   - Run Playwright tests
 
-- [ ] **Create release workflow**
+- [x] **Create release workflow**
   - Semantic version tagging
   - npm publish all packages
   - GitHub release creation
 
-- [ ] **Write CHANGELOG.md**
+- [x] **Write CHANGELOG.md**
   - Document all changes
   - Categorize by type
   - Include migration notes
 
-- [ ] **Publish to npm**
+- [x] **Publish to npm**
   - Test install locally
   - Publish to npm
   - Verify packages work
 
-- [ ] **Create GitHub repository**
+- [x] **Create GitHub repository**
   - Push code
   - Set up branch protection
   - Add issue templates
@@ -1202,16 +1424,18 @@ Phase 14
 | 5 | QMD Search Integration | 1-2 weeks | Phase 4 |
 | 6 | CLI Commands | 1 week | Phase 5 |
 | 7 | Server API | 1-2 weeks | Phase 6 |
+| 7a | Agent Core | 1-2 weeks | Phase 5, 7 |
+| 7b | Agent Loop & Modes | 1-2 weeks | Phase 7a |
 | 8 | Web Frontend - Core UI | 2 weeks | Phase 7 |
 | 9 | Web Frontend - Advanced | 2 weeks | Phase 8 |
 | 10 | Query System | 1 week | Phase 5, 6, 7 |
 | 11 | Lint System | 1 week | Phase 2, 10 |
 | 12 | MCP Server | 3-5 days | Phase 10, 11 |
-| 13 | Integration & Polish | 1 week | Phase 12 |
+| 13 | Integration & Polish | 1 week | Phase 7b, 12 |
 | 14 | Testing & QA | 1 week | Phase 13 |
 | 15 | Release & Launch | 2-3 days | Phase 14 |
 
-**Total Estimated Duration**: 14-18 weeks
+**Total Estimated Duration**: 16-22 weeks
 
 ---
 

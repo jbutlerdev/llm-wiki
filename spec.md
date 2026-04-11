@@ -32,11 +32,12 @@ Personal knowledge bases built on traditional RAG (Retrieval-Augmented Generatio
 ### Primary Goals
 
 1. **Persistent Knowledge Compounding**: Build a wiki that grows richer with every source ingested and every question asked, not re-derived on every query
-2. **LLM-Maintained Structure**: The LLM handles all bookkeeping—summarizing, cross-referencing, filing, and maintaining consistency
-3. **Built-in Search with QMD**: Integrate qmd for hybrid BM25 + vector + re-ranking search over wiki content
-4. **Three-Layer Architecture**: Maintain clear separation between raw sources (immutable), wiki (LLM-generated), and schema (LLM instructions)
-5. **Full-Stack Application**: Provide both CLI tools and a modern web interface for browsing, searching, and managing the wiki
-6. **Agent-Friendly**: Designed for use alongside LLM agents (Claude Code, Pi, etc.) as a persistent thinking partner
+2. **Embedded Pi Agent**: Full embedded agent loop using `pi-coding-agent` SDK that autonomously maintains the wiki—ingesting sources, updating pages, running lint, filing answers
+3. **LLM-Maintained Structure**: The agent handles all bookkeeping—summarizing, cross-referencing, filing, and maintaining consistency
+4. **Built-in Search with QMD**: Integrate qmd for hybrid BM25 + vector + re-ranking search over wiki content
+5. **Three-Layer Architecture**: Maintain clear separation between raw sources (immutable), wiki (agent-generated), and schema (agent instructions)
+6. **Full-Stack Application**: Provide both CLI tools and a modern web interface for browsing, searching, and managing the wiki
+7. **Multiple Agent Modes**: Support autonomous (self-running), interactive (user-driven), and semi-autonomous (user approves major changes)
 
 ### Success Metrics
 
@@ -101,6 +102,153 @@ Personal knowledge bases built on traditional RAG (Retrieval-Augmented Generatio
 - **Coverage Analysis**: Suggest missing cross-references and new pages for under-covered concepts
 - **Gap Filling**: Identify data gaps addressable via web search
 
+### Embedded Pi Agent
+
+The core of LLM Wiki is an embedded agent built using the `pi-coding-agent` SDK. The agent runs continuously, reading the wiki, ingesting sources, updating pages, and maintaining consistency.
+
+#### Agent Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Pi Agent (embedded)                   │
+├─────────────────────────────────────────────────────────┤
+│  Session Manager (persisted to disk)                    │
+│  - Message history, tree branching, compaction           │
+├─────────────────────────────────────────────────────────┤
+│  Agent Tools (wiki operations)                         │
+│  - wiki_search, wiki_ingest, wiki_query                 │
+│  - wiki_lint, wiki_get, wiki_status                    │
+│  - file operations (read, write, edit, bash)           │
+├─────────────────────────────────────────────────────────┤
+│  Agent Skills                                           │
+│  - Ingest skill (workflow for processing sources)       │
+│  - Query skill (workflow for answering questions)       │
+│  - Lint skill (workflow for health checks)            │
+│  - Wiki maintenance skill (cross-refs, contradictions) │
+├─────────────────────────────────────────────────────────┤
+│  Context Files                                          │
+│  - CLAUDE.md (wiki schema and conventions)            │
+│  - AGENTS.md (wiki-specific agent instructions)       │
+└─────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+              ┌────────────────────────┐
+              │     Core Wiki Ops     │
+              │  (packages/core)      │
+              └────────────────────────┘
+```
+
+#### Agent Modes
+
+| Mode | Description | When to Use |
+|------|-------------|-------------|
+| **Interactive** | Responds to explicit commands only | User wants full control |
+| **Semi-Autonomous** | Auto-runs, pauses for approvals | User wants automation with oversight |
+| **Autonomous** | Continuous self-maintenance | User trusts agent, wants passive accumulation |
+
+#### Agent Loop (Autonomous Mode)
+
+1. **Check for new sources** → Ingest if found
+2. **Run lint** → Fix minor issues, flag major ones
+3. **Check for stale pages** → Update with latest source info
+4. **Answer pending questions** → File good answers back to wiki
+5. **Compact session** → Manage context window
+6. **Sleep** → Wait for next cycle (configurable interval)
+
+#### Agent Tools (Custom)
+
+```typescript
+// Wiki tools exposed to the agent
+const wikiTools = [
+  {
+    name: "wiki_ingest",
+    description: "Ingest a source document into the wiki",
+    params: { source: "string", options?: "object" }
+  },
+  {
+    name: "wiki_search",
+    description: "Search the wiki using hybrid QMD search",
+    params: { query: "string", filters?: "object" }
+  },
+  {
+    name: "wiki_query",
+    description: "Ask a question against the wiki and get a synthesized answer",
+    params: { question: "string", fileAnswer?: "boolean" }
+  },
+  {
+    name: "wiki_lint",
+    description: "Run health checks on the wiki",
+    params: { fix?: "boolean" }
+  },
+  {
+    name: "wiki_get",
+    description: "Get a specific wiki page by ID or path",
+    params: { id: "string" }
+  },
+  {
+    name: "wiki_list",
+    description: "List all wiki pages with optional filters",
+    params: { type?: "string", tags?: "string[]" }
+  },
+  {
+    name: "wiki_status",
+    description: "Get wiki health and statistics",
+    params: {}
+  },
+  {
+    name: "wiki_log",
+    description: "Get recent wiki activity log",
+    params: { limit?: "number" }
+  },
+  {
+    name: "wiki_create_page",
+    description: "Create a new wiki page",
+    params: { type, title, content, frontmatter }
+  },
+  {
+    name: "wiki_update_page",
+    description: "Update an existing wiki page",
+    params: { id, changes }
+  },
+];
+```
+
+#### Schema (AGENTS.md Template)
+
+The agent reads `AGENTS.md` in the wiki root for instructions:
+
+```markdown
+# LLM Wiki Agent Instructions
+
+You are the maintainer of this wiki. Your job is to:
+
+## On Source Ingestion
+1. Read the source document
+2. Extract key entities and concepts
+3. Create/update entity pages
+4. Update the main summary if applicable
+5. Update cross-references
+6. Update index.md and log.md
+
+## On Questions
+1. Search relevant pages
+2. Synthesize an answer with citations
+3. File good answers back to the wiki if requested
+
+## On Lint
+1. Check for contradictions
+2. Check for orphan pages
+3. Check for stale content
+4. Fix minor issues automatically
+5. Flag major issues for review
+
+## Conventions
+- Page slugs: lowercase-kebab-case
+- Tags: lowercase, hyphen-separated
+- Links: [[page-slug]] or [[page-slug|Display Text]]
+- Frontmatter: always include tags, sources, relatedPages
+```
+
 ### Web Frontend Features
 
 #### 1. Wiki Browser
@@ -156,11 +304,20 @@ Personal knowledge bases built on traditional RAG (Retrieval-Augmented Generatio
 - `llm-wiki lint` - Run health checks
 - `llm-wiki status` - Show wiki status
 - `llm-wiki server` - Start web server
+- `llm-wiki agent start` - Start embedded agent loop
+- `llm-wiki agent stop` - Stop agent loop
+- `llm-wiki agent mode <mode>` - Set agent mode (autonomous/interactive/semi-autonomous)
+
+#### Agent Modes
+- **Interactive** (default): Agent responds to explicit user commands only. User drives workflow.
+- **Semi-Autonomous**: Agent auto-runs maintenance, pauses for user approval on major changes (new pages, deletions)
+- **Autonomous**: Agent runs continuously, making all maintenance decisions. User monitors via web UI.
 
 #### Web Interface
 - **Navigation**: Sidebar with page tree, breadcrumbs, quick search
-- **Actions**: Buttons for ingest, lint, settings
-- **Real-time**: WebSocket updates when wiki changes via CLI
+- **Actions**: Buttons for ingest, lint, settings, agent control
+- **Agent Dashboard**: View agent status, activity log, current task
+- **Real-time**: WebSocket updates when wiki or agent state changes
 
 ### Data Flow
 
@@ -173,16 +330,24 @@ Personal knowledge bases built on traditional RAG (Retrieval-Augmented Generatio
                            ▲                    │
                            │                    ▼
                     ┌──────┴──────┐      ┌─────────────┐
-                    │   LLM       │─────▶│    QMD      │
+                    │    Pi       │─────▶│    QMD      │
                     │   Agent     │      │   Search    │
-                    └─────────────┘      └─────────────┘
-                                               │
-                    ┌──────────────────────────┴──────────────────────────┐
-                    ▼                                                    ▼
-           ┌─────────────┐                                    ┌─────────────┐
-           │   CLI        │                                    │   Web UI    │
-           │  (Terminal)  │                                    │  (Browser)  │
-           └─────────────┘                                    └─────────────┘
+                    │  (embedded) │      │             │
+                    └──────┬──────┘      └─────────────┘
+                           │
+                    ┌──────┴──────┐
+                    ▼             ▼
+            ┌───────────┐   ┌───────────┐
+            │   Tools   │   │   Wiki    │
+            │  (core)   │   │   Files   │
+            └───────────┘   └───────────┘
+                           │
+                    ┌──────┴──────┐
+                    ▼             ▼
+           ┌─────────────┐   ┌─────────────┐
+           │   CLI       │   │   Web UI    │
+           │ (terminal)  │   │  (browser)  │
+           └─────────────┘   └─────────────┘
 ```
 
 ---
@@ -213,6 +378,9 @@ Personal knowledge bases built on traditional RAG (Retrieval-Augmented Generatio
 
 ### Backend Libraries
 
+- **pi-coding-agent**: Embedded agent SDK using `createAgentSession()`
+  - Provides the agent loop with tools, skills, extensions
+  - Sessions persist to disk, enabling long-running context
 - **qmd**: Built-in search engine (BM25 + vector + re-ranking)
   - Wrapped as internal module, not separate process
 - **marked**: Markdown parsing
@@ -224,14 +392,15 @@ Personal knowledge bases built on traditional RAG (Retrieval-Augmented Generatio
 
 ### Architecture Patterns
 
-- **Monorepo Structure**: Single repo with CLI, server, and web packages
+- **Monorepo Structure**: Single repo with packages
+  - `packages/core/` - Shared types, wiki operations, QMD integration
+  - `packages/agent/` - Embedded Pi agent (pi-coding-agent SDK wrapper)
   - `packages/cli/` - Terminal interface
   - `packages/server/` - Hono API server
   - `packages/web/` - React frontend
-  - `packages/core/` - Shared types and wiki operations
 
-- **Event-Driven Architecture**: Wiki changes broadcast via WebSocket
-- **Plugin Architecture**: Extensible via user-defined hooks in schema
+- **Event-Driven Architecture**: Wiki changes and agent events broadcast via WebSocket
+- **Plugin Architecture**: Extensible via user-defined hooks in schema and agent skills
 
 ### Development Style
 
@@ -429,8 +598,17 @@ GET    /api/config             // Get configuration
 PUT    /api/config             // Update configuration
 GET    /api/log                // Recent log entries
 
+// Agent
+GET    /api/agent/status       // Agent status (running, mode, current task)
+POST   /api/agent/start        // Start agent loop
+POST   /api/agent/stop         // Stop agent loop
+PUT    /api/agent/mode         // Set mode (interactive/semi/autonomous)
+POST   /api/agent/command      // Send command to agent (for interactive mode)
+GET    /api/agent/session      // Get agent session info
+GET    /api/agent/events       // SSE stream of agent events
+
 // WebSocket
-WS     /ws                     // Real-time updates
+WS     /ws                     // Real-time updates (wiki changes + agent events)
 ```
 
 ### QMD Integration
@@ -627,33 +805,50 @@ llm-wiki/
 │   ├── core/                # Shared types and wiki operations
 │   │   ├── src/
 │   │   │   ├── types/       # TypeScript definitions
-│   │   │   ├── core/        # Wiki operations (ingest, query, lint)
-│   │   │   ├── qmd/        # QMD integration wrapper
-│   │   │   ├── schema/     # Schema loading and enforcement
-│   │   │   └── utils/      # Shared utilities
+│   │   │   ├── wiki/        # Wiki operations (ingest, query, lint)
+│   │   │   ├── qmd/         # QMD integration wrapper
+│   │   │   ├── schema/      # Schema loading and enforcement
+│   │   │   └── utils/       # Shared utilities
+│   │   └── package.json
+│   │
+│   ├── agent/               # Embedded Pi agent
+│   │   ├── src/
+│   │   │   ├── session.ts   # Pi agent session management
+│   │   │   ├── tools/       # Wiki tools (wiki_search, wiki_ingest, etc.)
+│   │   │   ├── skills/      # Agent skills (ingest, query, lint)
+│   │   │   ├── loop.ts      # Autonomous agent loop
+│   │   │   ├── modes.ts     # Interactive/semi-autonomous/autonomous modes
+│   │   │   └── index.ts     # Entry point
+│   │   ├── skills/
+│   │   │   ├── ingest/
+│   │   │   ├── query/
+│   │   │   ├── lint/
+│   │   │   └── maintenance/
 │   │   └── package.json
 │   │
 │   ├── cli/                 # Terminal interface
 │   │   ├── src/
-│   │   │   ├── commands/   # CLI command implementations
-│   │   │   └── index.ts    # Entry point
+│   │   │   ├── commands/    # CLI command implementations
+│   │   │   └── index.ts     # Entry point
 │   │   └── package.json
 │   │
 │   ├── server/              # Hono API server
 │   │   ├── src/
-│   │   │   ├── routes/     # API route handlers
-│   │   │   ├── ws/         # WebSocket handlers
-│   │   │   └── index.ts    # Entry point
-│   │   ├── public/         # Bundled web assets
+│   │   │   ├── routes/      # API route handlers
+│   │   │   ├── agent/       # Agent API routes
+│   │   │   ├── ws/          # WebSocket handlers
+│   │   │   └── index.ts     # Entry point
+│   │   ├── public/          # Bundled web assets
 │   │   └── package.json
 │   │
 │   └── web/                 # React frontend
 │       ├── src/
-│       │   ├── components/ # Reusable UI components
-│       │   ├── pages/     # Page components
-│       │   ├── hooks/     # Custom React hooks
-│       │   ├── api/       # API client
-│       │   └── main.tsx   # Entry point
+│       │   ├── components/   # Reusable UI components
+│       │   ├── pages/       # Page components
+│       │   ├── agent/       # Agent dashboard components
+│       │   ├── hooks/       # Custom React hooks
+│       │   ├── api/         # API client
+│       │   └── main.tsx     # Entry point
 │       ├── public/
 │       ├── package.json
 │       └── vite.config.ts
@@ -662,8 +857,9 @@ llm-wiki/
 │   ├── raw/                 # Immutable source documents
 │   ├── index.md             # Content catalog
 │   ├── log.md               # Chronological log
-│   ├── CLAUDE.md            # Schema for LLM agents
-│   └── [pages]/             # Wiki pages by type
+│   ├── AGENTS.md            # Schema for embedded agent
+│   ├── CLAUDE.md            # Schema for external Claude Code
+│   └── [pages]/             # Wiki pages by type (entity/, source/, etc.)
 │
 ├── package.json             # Workspace root
 ├── tsconfig.json            # Root TypeScript config

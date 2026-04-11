@@ -3,6 +3,12 @@
  * @module @llm-wiki/core/types
  */
 
+// Re-export API types for server and web packages
+export * from './api.js';
+
+// Re-export fixtures for testing
+export * from './fixtures.js';
+
 /**
  * Wiki page types
  */
@@ -56,9 +62,10 @@ export interface WikiPage {
  * Source document reference
  */
 export interface SourceDocument {
-  path: string;
+  path?: string;
   type: SourceType;
   title: string;
+  content: string;
   ingestedAt: Date;
   url?: string;
   checksum: string;

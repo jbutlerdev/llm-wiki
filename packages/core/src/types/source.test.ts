@@ -10,6 +10,7 @@ describe('SourceDocument type', () => {
       path: 'raw/test-document.md',
       type: 'markdown',
       title: 'Test Document',
+      content: '# Test\n\nDocument content here.',
       ingestedAt: new Date(),
       checksum: 'abc123def456',
     };
@@ -17,6 +18,7 @@ describe('SourceDocument type', () => {
     expect(source.path).toBe('raw/test-document.md');
     expect(source.type).toBe('markdown');
     expect(source.title).toBe('Test Document');
+    expect(source.content).toBe('# Test\n\nDocument content here.');
     expect(source.ingestedAt).toBeInstanceOf(Date);
     expect(source.checksum).toBe('abc123def456');
   });
@@ -29,6 +31,7 @@ describe('SourceDocument type', () => {
         path: `test.${type === 'url' ? 'com' : type}`,
         type,
         title: `Test ${type}`,
+        content: 'Content here',
         ingestedAt: new Date(),
         checksum: 'checksum',
       };
@@ -41,6 +44,7 @@ describe('SourceDocument type', () => {
       path: 'raw/https---example-com-page',
       type: 'url',
       title: 'Example Page',
+      content: 'Content from URL',
       ingestedAt: new Date(),
       checksum: 'checksum',
       url: 'https://example.com/page',

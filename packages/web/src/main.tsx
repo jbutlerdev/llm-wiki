@@ -1,7 +1,26 @@
 /**
  * @llm-wiki/web - Web UI entry point
  * 
- * This module will export React app after Phase 8
+ * React application for LLM Wiki web interface.
  */
 
-export const webVersion = '0.1.0';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { App } from './App.js';
+import './index.css';
+
+// Mount the app
+const container = document.getElementById('root');
+if (!container) {
+  throw new Error('Root element not found');
+}
+
+const root = createRoot(container);
+root.render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>
+);
