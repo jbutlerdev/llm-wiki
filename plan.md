@@ -27,43 +27,43 @@ None
 
 ### Tasks
 
-- [ ] **Initialize monorepo with Turborepo**
+- [x] **Initialize monorepo with Turborepo**
   - Create root package.json with workspaces
   - Configure turbo.json build pipeline
   - Set up shared tooling (tsconfig, eslint, prettier)
 
-- [ ] **Create packages/core**
+- [x] **Create packages/core**
   - Set up TypeScript package
   - Configure path aliases (@llm-wiki/core)
   - Add to workspace
 
-- [ ] **Create packages/cli**
+- [x] **Create packages/cli**
   - Set up CLI package
   - Add command scaffolding
   - Add to workspace
 
-- [ ] **Create packages/server**
+- [x] **Create packages/server**
   - Set up Hono server package
   - Configure public directory for web assets
   - Add to workspace
 
-- [ ] **Create packages/web**
+- [x] **Create packages/web**
   - Set up React + Vite project
   - Configure Tailwind CSS
   - Add to workspace
 
-- [ ] **Configure Vitest for all packages**
+- [x] **Configure Vitest for all packages**
   - Set up test environment (Node.js for core/cli/server)
   - Set up test environment (JS DOM for web)
   - Configure coverage reporting (v8)
   - Define test file naming convention (*.test.ts)
 
-- [ ] **Write failing tests for project setup**
+- [x] **Write failing tests for project setup**
   - Test that TypeScript compiles without errors across packages
   - Test that test framework runs in each package
   - Test that lint passes on all source files
 
-- [ ] **Initialize git repository with .gitignore**
+- [x] **Initialize git repository with .gitignore**
   - Ignore node_modules/, dist/, .turbo/
   - Include wiki/ templates
 
@@ -88,44 +88,44 @@ Phase 0
 
 ### Tasks (TDD Cycle)
 
-- [ ] **Write failing test: WikiPage type includes required fields**
+- [x] **Write failing test: WikiPage type includes required fields**
   - Test slug, title, type, content, frontmatter, timestamps
   - Verify page type enum values
 
-- [ ] **Implement: WikiPage and PageMeta interfaces**
+- [x] **Implement: WikiPage and PageMeta interfaces**
   - Define PageType union
   - Add optional docId for QMD integration
 
-- [ ] **Write failing test: SourceDocument validation**
+- [x] **Write failing test: SourceDocument validation**
   - Test path, type, title, ingestedAt, checksum
   - Test SourceType union values
 
-- [ ] **Implement: SourceDocument interface and Zod schema**
+- [x] **Implement: SourceDocument interface and Zod schema**
   - Add validation for checksum format
   - Ensure immutability semantics
 
-- [ ] **Write failing test: LogEntry parsing**
+- [x] **Write failing test: LogEntry parsing**
   - Test timestamp, type, title parsing
   - Test log format (## [YYYY-MM-DD] type | Title)
 
-- [ ] **Implement: LogEntry interface and parser**
+- [x] **Implement: LogEntry interface and parser**
   - Regex for parsing existing log entries
   - Serializer for new entries
 
-- [ ] **Write failing test: LintReport type**
+- [x] **Write failing test: LintReport type**
   - Test LintIssue structure
   - Test issue types (contradiction, orphan, stale, coverage)
 
-- [ ] **Implement: LintReport and LintIssue interfaces**
+- [x] **Implement: LintReport and LintIssue interfaces**
   - Define issue severity levels
   - Add coverage gap type
 
-- [ ] **Write failing test: WikiConfig validation**
+- [x] **Write failing test: WikiConfig validation**
   - Test wiki directory path
   - Test raw directory path
   - Test QMD configuration
 
-- [ ] **Implement: WikiConfig interface and Zod schema**
+- [x] **Implement: WikiConfig interface and Zod schema**
   - Default values for optional fields
   - Path validation
 
