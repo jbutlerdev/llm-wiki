@@ -2,7 +2,12 @@
   "name": "@llm-wiki/server",
   "version": "0.1.0",
   "description": "Hono API server for LLM Wiki with WebSocket support",
-  "keywords": ["wiki", "api", "server", "websocket"],
+  "keywords": [
+    "wiki",
+    "api",
+    "server",
+    "websocket"
+  ],
   "author": "jbutlerdev <jbutlerdev@example.com>",
   "license": "MIT",
   "type": "module",
@@ -36,7 +41,7 @@
     "@types/node": "^22.0.0",
     "@types/ws": "^8.5.0",
     "tsx": "^4.0.0",
-    "vitest": "^2.0.0"
+    "vitest": "^5.0.5"
   },
   "peerDependencies": {
     "@llm-wiki/core": "^0.1.0"

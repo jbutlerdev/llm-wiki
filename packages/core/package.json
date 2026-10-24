@@ -2,7 +2,12 @@
   "name": "@llm-wiki/core",
   "version": "0.1.0",
   "description": "Core wiki operations, types, and QMD search integration",
-  "keywords": ["wiki", "llm", "knowledge-base", "qmd"],
+  "keywords": [
+    "wiki",
+    "llm",
+    "knowledge-base",
+    "qmd"
+  ],
   "author": "jbutlerdev <jbutlerdev@example.com>",
   "license": "MIT",
   "type": "module",
@@ -101,6 +106,6 @@
   },
   "devDependencies": {
     "@types/turndown": "^5.0.0",
-    "vitest": "^2.0.0"
+    "vitest": "^5.0.5"
   }
 }

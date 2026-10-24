@@ -2,7 +2,13 @@
   "name": "@llm-wiki/web",
   "version": "0.1.0",
   "description": "React web UI for LLM Wiki with dashboard, browse, search, graph, and agent controls",
-  "keywords": ["wiki", "web", "ui", "react", "dashboard"],
+  "keywords": [
+    "wiki",
+    "web",
+    "ui",
+    "react",
+    "dashboard"
+  ],
   "author": "jbutlerdev <jbutlerdev@example.com>",
   "license": "MIT",
   "type": "module",
@@ -33,14 +39,14 @@
     "@types/d3": "^7.4.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.0",
+    "@vitejs/plugin-react": "^6.0.0",
     "autoprefixer": "^10.4.0",
     "jsdom": "^24.0.0",
     "postcss": "^8.4.0",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.5.0",
-    "vite": "^5.4.0",
-    "vitest": "^2.0.0"
+    "vite": "^8.0.0",
+    "vitest": "^5.0.5"
   },
   "peerDependencies": {
     "@llm-wiki/core": "^0.1.0"
